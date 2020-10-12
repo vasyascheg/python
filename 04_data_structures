@@ -1,2 +1,64 @@
 4_1
 print(nat.replace('Fast', 'Gigabit'))
+
+
+4_2
+print(mac.replace(":","."))
+
+
+4_3
+print(config.split()[-1].split(','))
+
+
+4_4
+print(sorted(vlans))
+
+
+4_5
+command1 = command1.split()[-1].split(',')
+command2 = command2.split()[-1].split(',')
+set1 = set(command1) #set-множество
+set2 = set(command2)
+setall = set1.intersection(set2)
+vlans = list(setall)
+vlans = sorted(vlans)
+print(vlans)
+
+
+4_6
+ospf_route = "      10.0.24.0/24 [110/41] via 10.0.13.3, 3d18h, FastEthernet0/0"
+str = 'Prefix                {}\nAD/Metric             {}\nNext-Hop              {}\nLast update           {}\nOutbound Interface    {}'
+
+ospf = ospf_route.split()
+
+prefix = ospf[0]
+ad = ospf[1]
+hop = ospf[3]
+update = ospf[4]
+interface = ospf[5]
+
+ad = ad.strip('[]')
+hop = hop.rstrip(',')
+update = update.rstrip(',')
+
+
+
+print(str.format(prefix,ad,hop, update,interface))
+
+
+4_7
+mac = "AAAA:BBBB:CCCC"
+mac = mac.replace(':','')
+mac = int(mac, 16)
+mac = bin(mac)
+mac = mac[2:]
+print(mac)
+
+
+4_8
+ip = "192.168.3.1"
+ip = '''
+{0:<10} {1:<10} {2:<10} {3:<10}
+{0:09b} {1:09b} {2:09b} {3:09b}
+'''
+print(ip.format(192, 168, 3, 1))

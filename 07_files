@@ -1,0 +1,118 @@
+7_1
+f = open('/home/std/web-2020-1/pyneng-examples-exercises/exercises/07_files/ospf.txt', 'r')
+l = f.readlines() #считываем строки файла в список
+t = 'Prefix                {}\nAD/Metric             {}\nNext-Hop              {}\nLast update           {}\nOutbound Interface    {}\n'
+for s in l:
+    s = s.split()
+    pref = s[1]
+    ad = s[2].strip('[]')
+    nh = s[4].strip(',')
+    lu = s[5].strip(',')
+    oi = s[6]
+    print(t.format(pref, ad, nh, lu, oi))
+
+f.close()
+
+7_2
+import sys
+f = open(sys.argv[1], 'r')
+#l = f.readlines() #считываем строки файла в список
+for s in f:
+    if not (s.startswith('!') or s.strip(' ') == ''):  #проверка на то, начинается ли строка на "!"
+       # print(s.strip('\n'))  
+       print(s, end='')
+f.close()
+
+7_2a
+ignore = ["duplex", "alias", "Current configuration"]
+
+import sys
+f = open(sys.argv[1], 'r')
+l = f.readlines() #считываем строки файла в список
+for s in l:
+    if not (s.startswith('!') or s.strip(' ') == ''):
+        do_ignore = False
+        for i in ignore:
+            if s.find(i) >= 0:
+                do_ignore = True
+                break
+
+        if not do_ignore:        
+            print(s, end='')
+
+f.close()
+
+7_2b
+ignore = ["duplex", "alias", "Current configuration"]
+
+import sys
+o = open('config_sw1_cleared.txt', 'w')
+f = open(sys.argv[1], 'r')
+l = f.readlines() #считываем строки файла в список
+for s in l:
+    if not (s.startswith('!') or s.strip(' ') == ''):
+        do_ignore = False
+        for i in ignore:
+            if s.find(i) >= 0:
+                do_ignore = True
+                break
+
+        if not do_ignore:   
+            o.write(s)     
+           # print(s, end='')
+
+f.close()
+o.close()
+
+7_2c
+ignore = ["duplex", "alias", "Current configuration"]
+
+import sys
+f = open(sys.argv[1], 'r')
+o = open(sys.argv[2], 'w')
+l = f.readlines()
+for s in l:
+   # if not (s.startswith('!') or s.strip(' ') == ''):
+    if True:
+        do_ignore = False
+        for i in ignore:
+            if s.find(i) >= 0:
+                do_ignore = True
+                break
+
+        if not do_ignore:   
+            o.write(s)     
+           # print(s, end='')
+
+f.close()
+o.close()
+
+7_3
+f = open('CAM_table.txt', 'r')
+l = f.readlines()
+for s in l[6:]:
+    print(s.replace('DYNAMIC     ', ''), end='')
+
+
+f.close()
+
+7_3a
+f = open('CAM_table.txt', 'r')
+l = f.readlines()
+l = sorted(l[6:], key = lambda s: int(s[:5]))
+for s in l:
+    print(s.replace('DYNAMIC     ', ''), end='')
+
+f.close()
+
+7_3b
+v = input('Введите номер VLAN: ')
+v = int(v)
+f = open('CAM_table.txt', 'r')
+l = f.readlines()
+for s in l[6:]:
+
+    if int(s[:5]) == v:
+        print(s.replace('DYNAMIC     ', ''), end='')
+
+f.close()

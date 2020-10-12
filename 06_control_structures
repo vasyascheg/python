@@ -1,0 +1,83 @@
+6_1
+mac = ["aabb:cc80:7000", "aabb:dd80:7340", "aabb:ee80:7000", "aabb:ff80:7000"]
+mac_cisco = list(m.replace(':' , '.') for m in mac)
+print(mac_cisco)
+
+6_2
+ip = input('Введите IP-адрес в формате 10.0.1.1:')
+ipl = ip.split('.') 
+if 1 <= int(ipl[0]) <= 223:
+   print('unicast')
+elif  224 <= int(ipl[0]) <= 239:   
+   print('multicast')
+elif  ip == '255.255.255.255': 
+   print('local broadcast') 
+elif  ip == '0.0.0.0': 
+   print('unassigned')
+else:
+   print('unused')
+   
+6_2a
+ip = input('Введите IP-адрес в формате 10.0.1.1:')
+ipl = ip.split('.') #список октетов
+flag = 0 #счетчик октетов
+if len(ipl) == 4:
+   for i in ipl:
+      if i.isdigit() and (0 <= int(i) <= 255):
+         flag = flag + 1 #сколько правильных октетов
+if flag != 4:
+   print('Неправильный IP-адрес')  
+   exit()     
+
+
+if 1 <= int(ipl[0]) <= 223:
+   print('unicast')
+elif  224 <= int(ipl[0]) <= 239:   
+   print('multicast')
+elif  ip == '255.255.255.255': 
+   print('local broadcast') 
+elif  ip == '0.0.0.0': 
+   print('unassigned')
+else:
+   print('unused') 
+   
+6_2b
+while True:
+    
+    ip = input('Введите IP-адрес в формате 10.0.1.1:')
+    ipl = ip.split('.') #список тетрад
+
+    flag = 0 #счетчик тетрад
+    if len(ipl) == 4:
+        for i in ipl:
+            if i.isdigit() and (0 <= int(i) <= 255):
+                flag = flag + 1 #сколько правильных тетрад
+    if flag == 4:
+        break
+    
+    print('Неправильный IP-адрес')       
+
+
+if 1 <= int(ipl[0]) <= 223:
+   print('unicast')
+elif  224 <= int(ipl[0]) <= 239:   
+   print('multicast')
+elif  ip == '255.255.255.255': 
+   print('local broadcast') 
+elif  ip == '0.0.0.0': 
+   print('unassigned')
+else:
+   print('unused')   
+   
+6_3
+for intf, vlan in trunk.items():
+    print("interface FastEthernet" + intf)
+    for command in trunk_template:
+        if command.endswith("allowed vlan"):
+            c = {'add':'add ', 'del':'remove ', 'only':''}[ vlan[0] ] #присваиваем словарь
+            v = ','.join(vlan[1:])
+
+            print(f" {command} {c}{v}")
+
+        else:
+            print(f" {command}")

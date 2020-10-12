@@ -1,0 +1,142 @@
+5_1
+n = input('Введите имя устройства: ')
+print(london_co[n])
+
+5_1a
+n = input('Введите имя устройства: ')
+p = input('Введите имя параметра устройства: ')
+print(london_co[n][p])
+
+5_1b
+n = input('Введите имя устройства: ')
+s = ', '.join(london_co[n].keys())  #join объединяет элементы последовательности в строку 
+                                    #keys отображает ключи, значения и пары ключ-значение словаря соответственно 
+p = input('Введите имя параметра устройства ({}): '.format(s))
+print(london_co[n][p])
+
+5_1c
+n = input('Введите имя устройства: ')
+s = ', '.join(london_co[n].keys())
+p = input('Введите имя параметра устройства ({}): '.format(s))
+print(london_co[n].get(p, 'Такого параметра нет'))
+
+5_1d
+n = input('Введите имя устройства: ')
+s = ', '.join(london_co[n].keys())
+p = input('Введите имя параметра устройства ({}): '.format(s))
+p = p.lower() #регистр
+if london_co[n].get(p) is None:
+    print('Такого параметра нет')
+else:
+    print(london_co[n][p])
+    
+5_2
+n = input('Введите IP-сети в формате: 10.1.1.0/24: ')
+n = n.split('/') #разделяем строку на адрес сети и маску
+ip = n[0]
+m = n[1]
+ip = ip.split('.') #разрезаем адрес на тетрады
+m = int(m)
+m = '1'* m + '0' * (32-m)
+m1 =int(m[0:8], 2)  #получаем бинарные тетрады (по 4 симв)
+m2 = int(m[8:16], 2)
+m3 = int(m[16:24], 2)
+m4 = int(m[24:], 2)
+ipf = '''{0:<8} {1:<8} {2:<8} {3:<8}
+{0:08b} {1:08b} {2:08b} {3:08b}'''     #отформатированный ip
+print('Network:')
+print(ipf.format(int(ip[0]), int(ip[1]), int(ip[2]), int(ip[3]))) #из строки делаем целочисл
+
+print('\nMask:')
+print('/'+n[1])
+print(ipf.format(m1, m2, m3, m4))
+
+5_2a
+n = input('Введите IP-сети в формате: 10.1.1.0/24: ')
+n = n.split('/')
+ip = n[0]
+m = n[1]
+ip = ip.split('.')
+
+i1 = int(ip[0])
+i2 = int(ip[1])
+i3 = int(ip[2])
+i4 = int(ip[3])
+
+m = int(m)
+m = '1'* m + '0' * (32-m)
+m1 =int(m[0:8], 2)
+m2 = int(m[8:16], 2)
+m3 = int(m[16:24], 2)
+m4 = int(m[24:], 2)
+
+i1 = i1 & m1  #выполняем конъюнкцию чтобы из ад хоста получить адрес сети
+i2 = i2 & m2
+i3 = i3 & m3
+i4 = i4 & m4
+
+ipf = '''{0:<8} {1:<8} {2:<8} {3:<8}
+{0:08b} {1:08b} {2:08b} {3:08b}'''
+print('Network:')
+print(ipf.format(i1, i2, i3, i4))
+
+
+print('\nMask:')
+print('/'+n[1])
+print(ipf.format(m1, m2, m3, m4))
+
+5_2b
+import sys  #sys позволяет работать с аргументами скрипта с помощью argv
+n = sys.argv[1]
+
+n = n.split('/')
+ip = n[0]
+m = n[1]
+ip = ip.split('.')
+i1 = int(ip[0])
+i2 = int(ip[1])
+i3 = int(ip[2])
+i4 = int(ip[3])
+m = int(m)
+m = '1'* m + '0' * (32-m)
+m1 =int(m[0:8], 2)
+m2 = int(m[8:16], 2)
+m3 = int(m[16:24], 2)
+m4 = int(m[24:], 2)
+
+i1 = i1 & m1
+i2 = i2 & m2
+i3 = i3 & m3
+i4 = i4 & m4
+
+ipf = '''{0:<8} {1:<8} {2:<8} {3:<8}
+{0:08b} {1:08b} {2:08b} {3:08b}'''
+print('Network:')
+print(ipf.format(i1, i2, i3, i4))
+
+
+print('\nMask:')
+print('/'+n[1])
+print(ipf.format(m1, m2, m3, m4))
+
+5_3
+mode = input('Введите информацию о режиме интерфейса (access/trunk): ')
+num = input('Введите номер интерфейса (тип и номер, вида Gi0/3): ')
+vlan = input('Введите номер VLANа : ')
+print('interface', num)
+#создаем словарь содержащий списки шаблонов для access и trunk
+s =  {'access':access_template,  'trunk':trunk_template}[mode] 
+s = '\n'.join(s) #делаем многострочный шаблон из списка с разделителем
+print(s.format(vlan))
+
+5_3a
+mode = input('Введите информацию о режиме интерфейса (access/trunk): ')
+num = input('Введите номер интерфейса (тип и номер, вида Gi0/3): ')
+vlan = input({ 'access':'Введите номер VLAN:', 'trunk': 'Введите разрешенные VLANы:'}[mode])
+print('interface', num)
+
+s = {'access':access_template, 'trunk':trunk_template}[mode]       
+s = '\n'.join(s) #делаем многострочный шаблон из списка с разделителем
+print(s.format(vlan))
+    
+    

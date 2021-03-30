@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% from 'pagination.html' import render_pagination %}
+{% block content %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+    {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div> 
+    {% endfor %}
+{% endif %}
+{% endwith %}
+<h1 class="my-5 main-text">Список фильмов</h1>
+
+<table class="table main-text">
+    <thead>
+        <tr>
+            <th>Название</th>
+            <th>Жанры</th>
+            <th>Год производства</th>
+            <th>Количество рецензий</th>
+            {% if current_user.is_authenticated %}
+            <th></th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for film in films %}
+        <tr>
+            <td class="film-name">{{ film.name }} </td>
+            <td>{% for genre in genres %} {% if film.id==genre.f_id %}{{ genre.g_name }}{% endif %} {% endfor %}</td>
+            <td>
+                {{ film.production_year }}
+            </td>
+            <td>{% for review in reviews %} 
+                {% if film.id==review.id %}
+                    {{ review.cnt }}
+                {% else %}
+                {% endif %}
+                {% endfor %}
+            </td>
+            {% if current_user.is_authenticated %}
+            <td>
+                {% if current_user.can('show', record=film) %}
+                <a class="btn btn-dark" href="{{ url_for('show', film_id=film.id) }}">Просмотр</a>
+                {% endif %}
+                {% if current_user.can('edit', record=film) %}
+                <a class="btn btn-dark" href="{{ url_for('edit', film_id=film.id) }}">Редактирование</a>
+                {% endif %}
+                {% if current_user.can('delete', record=film) %}
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-film-modal" data-url="{{ url_for('delete', film_id=film.id)}}">Удаление</button>
+                {% endif %}
+
+            </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if current_user.is_authenticated and current_user.can('new') %}
+<div class="text-center my-3">
+<a class="btn btn-dark" href="{{ url_for('new') }}">Добавить фильм</a>
+</div>
+{% endif %}
+
+<div class="modal" tabindex="-1" role="dialog" id="delete-film-modal">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Удаление записи</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Вы уверены, что хотите удалить фильм <span id="film-name"></span>?</p>
+                <form action="" method="POST" class="d-none">
+                    <input id="delete-btn" type="submit">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <label for="delete-btn" class="btn btn-danger mb-0 cursor-pointer">Да</label>
+                <button type="button" class="btn btn-secondary mb-0" data-dismiss="modal">Нет</button>
+            </div>
+        </div>
+    </div>
+</div>
+{{ render_pagination(request.endpoint, pagination_info) }}
+{% endblock %}

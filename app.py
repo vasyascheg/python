@@ -14,24 +14,7 @@ app.config['SECRET_KEY'] = 'super-secret'
 with open("/home/std/web-2020-1/qt_8_lab/app/avatar.jpg", "rb") as image_file:
     encoded_string = base64.b64encode(image_file.read())
 
-#from faker import Faker
-#from flask_jwt import JWT, jwt_required, current_identity
-#from werkzeug.security import safe_str_cmp
 
-
-#class User(object):
- #   def __init__(self, id, username, password):
- #       self.id = id
- #       self.username = username
- #       self.password = password
-
- #   def __str__(self):
- #       return "User(id='%s')" % self.id
-
-#users = [
-#    User(1, 'user1', 'abcxyz'),
- #   User(2, 'user2', 'abcxyz'),
-#]
 
 def users():
     return [{'user_id': '1', 'login': 'user', 'password': 'qwerty'}]
@@ -67,9 +50,6 @@ def index():
 app.config['PROPAGATE_EXCEPTIONS'] = True ####!!!!!
 #app.debug = True
 
-#jwt = JWT(app, authenticate, identity)
-#print('qqqq')
-#print(os.getcwd())
 
 @app.route('/protected')
 #@jwt_required()
@@ -83,9 +63,7 @@ def protected():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-   # username = request.args.get('username')
-    #username = request.args.get('login')
-    #password = request.args.get('password')
+ 
     username = request.form.get('username')
     password = request.form.get('password')
     print(request.args) #
@@ -107,5 +85,4 @@ def login():
 
 
 if __name__ == '__main__':
-    #app.run(debug=True, ssl_context=('cert.pem', 'key.pem'))
     app.run()
